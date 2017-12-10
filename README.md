@@ -17,7 +17,7 @@ contains some dameon services for systemd.
 
 1. Download the script
 2. make the script executable via shell command ```sudo chmod +x your_script.sh```
-3. Run your your scrip via ```./your_scrip.sh```
+3. Run your your scrip via ```./your_script.sh```
 
 If this all new to you, no problem! Just check these references
 * http://www.circuitbasics.com/how-to-write-and-run-a-shell-script-on-the-raspberry-pi/
