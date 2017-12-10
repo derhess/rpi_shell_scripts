@@ -21,6 +21,7 @@ contains some dameon services for systemd.
 
 If this all new to you, no problem! Just check these references
 * http://www.circuitbasics.com/how-to-write-and-run-a-shell-script-on-the-raspberry-pi/
+* https://www.shellscript.sh/index.html
 * http://www.circuitbasics.com/useful-raspberry-pi-commands/
 * http://rogerdudler.github.io/git-guide/
 * http://derhess.de/2017/02/21/local-dev-server-couchdb-2-0-nodejs-raspberrypi/
