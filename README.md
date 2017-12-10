@@ -20,7 +20,7 @@ contains some dameon services for systemd.
 3. Run your your scrip via ```./your_scrip.sh```
 
 If this all new to you, no problem! Just check these references
-http://www.circuitbasics.com/how-to-write-and-run-a-shell-script-on-the-raspberry-pi/
-http://www.circuitbasics.com/useful-raspberry-pi-commands/
-http://rogerdudler.github.io/git-guide/
-http://derhess.de/2017/02/21/local-dev-server-couchdb-2-0-nodejs-raspberrypi/
+* http://www.circuitbasics.com/how-to-write-and-run-a-shell-script-on-the-raspberry-pi/
+* http://www.circuitbasics.com/useful-raspberry-pi-commands/
+* http://rogerdudler.github.io/git-guide/
+* http://derhess.de/2017/02/21/local-dev-server-couchdb-2-0-nodejs-raspberrypi/
