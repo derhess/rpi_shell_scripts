@@ -4,12 +4,20 @@ NGINX_USER="nginx"
 NGINX_USER_GROUP="nginx"
 NGINX_DOWNLOAD_FOLDER_NAME="nginx_dl"
 NGINX_DOWNLOAD_FOLDER_TARGET_PATH="/home/pi"
+
+#Be careful changing these folder locations
+#If you change these folders, please update the nginx.service daemon and the nginx.conf file
 NGINX_INSTALLATION_TARGET_FOLDER="/usr/sbin/nginx"
+NGINX_CONFIG_TARGET_FOLDER="/etc/nginx"
 NGINX_WWW_FOLDER_PATH="/home/nginx/www"
 
+# Linkage the  current nginx source package and
+# connect the pre-applied server configurations 
 NGINX_DOWNLOAD_MIRROR="http://nginx.org/download/nginx-1.13.7.tar.gz"
 NGINX_DAEMON_SYSTEMD_SERVICE_FILE_PATH="/home/pi/rpi_shell_scripts/systemd_scripts/nginx.service"
 NGINX_DAEMON_SYSTEMD_SERVICE_TARGET="/etc/systemd/system/nginx.service"
+NGINX_DEFAULT_CONFIG_FILE="/home/pi/rpi_shell_scripts/other_configs/nginx/nginx.conf"
+NGINX_DEFAULT_HTML_PAGE="/home/pi/rpi_shell_scripts/other_configs/nginx/index.html"
 
 NGINX_GEO_IP_IS_ACTIVE=true
 NGINX_GEO_IP_DOWNLOAD_MIRROR="http://geolite.maxmind.com/download/geoip/api/c/GeoIP-1.4.5.tar.gz"
@@ -17,6 +25,8 @@ NGINX_GEO_IP_DOWNLOAD_MIRROR="http://geolite.maxmind.com/download/geoip/api/c/Ge
 echo "Installing nginx"
 cd $NNGINX_DOWNLOAD_FOLDER_TARGET_PATH
 mkdir $NGINX_DOWNLOAD_FOLDER_NAME 
+cd $NGINX_DOWNLOAD_FOLDER_NAME
+
 
 #Installing dependencies
 echo "Prepare dependencies for installation"
@@ -31,25 +41,30 @@ sudo apt-get install libgd2-noxpm-dev
 
 #Install GeoIP for the nginx GeoIP module
 # https://it.awroblew.biz/category/hardware/raspberrypi/
+GEO_IP_MODULE_CONFIG_COMMAND=""
 if [ "$NGINX_GEO_IP_IS_ACTIVE" = true ] ; then
 	echo "Install Geo IP Dependency"
 	wget $NGINX_GEO_IP_DOWNLOAD_MIRROR
 	tar -xvf GeoIP-1.*.tar.gz
+	cd $NGINX_DOWNLOAD_FOLDER_TARGET_PATH"/"$NGINX_DOWNLOAD_FOLDER_NAME"/GeoIP*/"
 	./configure
 	make
 	make check
 	make install
+
+	$GEO_IP_MODULE_CONFIG_COMMAND="--with-http_geoip_module"
 fi
 
 echo "Download nginx version 1.x  from the server"
+cd $NGINX_DOWNLOAD_FOLDER_TARGET_PATH"/"$NGINX_DOWNLOAD_FOLDER_NAME"/"
 wget $NGINX_DOWNLOAD_MIRROR
 tar -xvf nginx-1.*.tar.gz
-cd nginx*
+cd nginx*/
 
 # Config the nginx server
 echo "configure the nginx installation with additional modules"
 ./configure --user=$NGINX_USER \
-	 --group=$NGINX_USER_GROUP \
+	--group=$NGINX_USER_GROUP \
 	--prefix=/etc/nginx \
 	--sbin-path=$NGINX_INSTALLATION_TARGET_FOLDER \
 	--conf-path=/etc/nginx/nginx.conf \
@@ -73,7 +88,7 @@ echo "configure the nginx installation with additional modules"
 	--with-http_mp4_module \
 	--with-http_dav_module \
 	--with-http_sub_module \
-	--with-http_geoip_module \
+	$GEO_IP_MODULE_CONFIG_COMMAND \
 	--with-http_addition_module \
 	--with-http_v2_module \
 	--with-http_image_filter_module \
@@ -111,12 +126,16 @@ alias xrestart="sudo systemctl restart nginx.service"
 #Create the www folder for your static web files
 echo "Create the www folder, where you can run your static webfiles"
 sudo mkdir -p $NGINX_WWW_FOLDER_PATH
+# Copy the default starter wep page 
+sudo cp $NGINX_DEFAULT_HTML_PAGE $NGINX_WWW_FOLDER_PATH
+
 #change user rights of the folder
 sudo chmod -R 775  $NGINX_WWW_FOLDER_PATH
 sudo chgrp -R $NGINX_USER_GROUP $NGINX_WWW_FOLDER_PATH
 
+#change the default  html/www root folder of nginx
+sudo cp $NGINX_DEFAULT_CONFIG_FILE $NGINX_CONFIG_TARGET_FOLDER"/nginx.conf"
 
 #clean installation folder
 echo "clean some the installation folders"
 sudo rm -rf $NGINX_DOWNLOAD_FOLDER_TARGET_PATH"/"$NGINX_DOWNLOAD_FOLDER_NAME"/"
-
