@@ -57,17 +57,18 @@ echo "configure the nginx installation with additional modules"
 	--lock-path=/var/run/nginx.lock \
 	--error-log-path=/var/log/nginx/error.log \
 	--http-log-path=/var/log/nginx/access.log \
-	--with-http_gunzip_module --with-http_secure_link_module \
-	--with-http_auth_request_module \
+	--with-debug \
+	--with-http_gunzip_module  \
 	--with-http_gzip_static_module \
 	--with-http_stub_status_module \
+	--with-http_realip_module \
+	--with-http_auth_request_module \
 	--with-http_ssl_module \
+	--with-stream_ssl_module \
+	--with-http_secure_link_module \
 	--with-pcre \
 	--with-file-aio \
-	--with-http_realip_module \
 	--with-stream \
-	--with-stream_ssl_module \
-	--with-debug \
 	--with-http_flv_module \
 	--with-http_mp4_module \
 	--with-http_dav_module \
